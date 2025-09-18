@@ -6,7 +6,7 @@ export default function HomePage() {
   const [status, setStatus] = useState('');
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/healthcheck`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/posts`)
       .then((res) => res.json())
       .then((data) => setStatus(data.status))
       .catch((error) => console.error(error));

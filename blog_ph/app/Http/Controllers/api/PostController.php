@@ -65,7 +65,7 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
-            'summary' => 'nullable|string',
+            'summary' => 'required|string',
             'status' => 'sometimes|in:draft,published,archived',
             'tags' => 'nullable|array',
         ]);

@@ -5,10 +5,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-    Route::get('/healthcheck', function () {
-        return response()->json(['status' => 'ok'])->header('Access-Control-Allow-Origin', '*');
-    });
-
     Route::get('/posts', [PostController::class, 'index']);
     Route::get('/posts/{post:slug}', [PostController::class, 'show'])->where('post', '[a-zA-Z0-9\-]+');
     

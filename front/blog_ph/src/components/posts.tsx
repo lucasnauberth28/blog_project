@@ -46,7 +46,7 @@ export default function Posts() {
 
                         <div className='flex gap-1'>
                             {post.tags.map((tag: any) => (
-                                <Badge key={tag.id}>{tag.name}</Badge>
+                                <Badge className='bg-black/50 border rounded-sm border-black/10' key={tag.id}>{tag.name}</Badge>
                             ))}
                         </div>
                     </div>

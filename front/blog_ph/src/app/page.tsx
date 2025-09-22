@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import api from "../lib/api";
 import Header from '@/src/components/header';
 import Banner from "../components/banner";
 import Posts from "../components/posts";

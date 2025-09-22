@@ -48,7 +48,9 @@ export default function Header() {
             </nav>
 
             <div className="hidden md:flex">
-                <Button className="cursor-pointer">Sou #PhZeiro</Button>
+                <Link href='/login'>
+                  <Button className="cursor-pointer">Sou #PhZeiro</Button>
+                </Link>
             </div>
             
             <button

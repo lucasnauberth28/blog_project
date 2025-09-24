@@ -1,23 +1,13 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  // Ativa o modo escuro, geralmente gerenciado por um theme-provider (ex: next-themes)
-  darkMode: ["class"],
-  
-  // ESTA É A PARTE MAIS IMPORTANTE.
-  // O array 'content' diz ao Tailwind QUAIS arquivos ele deve "ler"
-  // para encontrar as classes que você está usando (ex: "bg-red-500", "p-4").
-  // Certifique-se de que os caminhos correspondem à estrutura do seu projeto.
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-    './app/**/*.{js,ts,jsx,tsx}',
-    './src/**/*.{js,ts,jsx,tsx}',
-	],
-  
-  // O prefixo é opcional. Para shadcn, é melhor deixar em branco.
-  prefix: "",
+import type { Config } from "tailwindcss"
 
-  // A seção 'theme' é onde o shadcn adiciona suas customizações de design.
+const config: Config = {
+  darkMode: "class",
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -26,7 +16,6 @@ module.exports = {
         "2xl": "1400px",
       },
     },
-    // Aqui o shadcn estende o tema padrão do Tailwind com suas próprias cores e estilos.
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -68,7 +57,6 @@ module.exports = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      // Animações customizadas que o shadcn usa em seus componentes.
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -85,6 +73,7 @@ module.exports = {
       },
     },
   },
-
   plugins: [require("tailwindcss-animate")],
 }
+
+export default config

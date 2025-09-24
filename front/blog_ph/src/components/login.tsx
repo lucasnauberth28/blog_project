@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from 'react';
-import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,7 +25,6 @@ import {
 import api from '../lib/api';
 import { toast } from 'sonner';
 
-// Definição do schema de validação com Zod
 const emailFormSchema = z.object({
   name: z.string().min(1, "O nome é obrigatório."),
   email: z.string().email("E-mail inválido.").refine(
@@ -46,6 +47,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
+  const router = useRouter();
 
   const emailForm = useForm<EmailFormValues>({
     resolver: zodResolver(emailFormSchema),
@@ -85,10 +87,14 @@ const LoginPage = () => {
     setError('');
 
     try {
-      await api.post('/auth/verify-code', { code: data.code, email: userEmail,  });
-      toast.success(`Bem vindo!`);
+      await api.post('/auth/verify-code', { code: data.code, email: userEmail });
+      toast.success(`Seja bem vindo #PhZeiro!`);
+      router.push('/manage-posts')
     } catch {
-      setError('Código inválido ou expirado.');
+      toast.error('Código inválido ou expirado.');
+      setTimeout(() => {
+        setStep('emailInput');
+      }, 500)
     } finally {
       setLoading(false);
     }
@@ -97,9 +103,9 @@ const LoginPage = () => {
   if (step === 'emailInput') {
     return (
       <div className="space-y-4 w-3/4 m-auto">
-        <div className='w-full flex flex-col text-left'>
-          <h1>Bem vindo de volta!</h1>
-          <p>Entre para gerenciar os posts.</p>
+        <div className='w-full flex flex-col text-left mb-8'>
+          <h1 className='font-bold text-3xl'>Bem vindo de volta!</h1>
+          <p className='text-black/80'>Entre para acessar os posts da Ph Negócios. Crie, edite e inative.</p>
         </div>
         <Form {...emailForm}>
           <form onSubmit={emailForm.handleSubmit(handleSendCode)} >
@@ -107,10 +113,10 @@ const LoginPage = () => {
               control={emailForm.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className='mb-6'>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input placeholder="Seu nome" {...field} />
+                    <Input placeholder="Digite seu nome" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -120,10 +126,10 @@ const LoginPage = () => {
               control={emailForm.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className='mb-8'>
                   <FormLabel>E-mail</FormLabel>
                   <FormControl>
-                    <Input placeholder="Seu e-mail" {...field} />
+                    <Input placeholder="Digite seu e-mail" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -132,7 +138,6 @@ const LoginPage = () => {
             <Button type="submit" className='w-full bg-red-600 py-6 hover:bg-red-700 transition cursor-pointer' disabled={loading}>
               {loading ? 'Enviando...' : 'Enviar código'}
             </Button>
-            {error && <p className="text-red-500">{error}</p>}
           </form>
         </Form>
       </div>
@@ -140,36 +145,39 @@ const LoginPage = () => {
   }
 
   return (
-    <Form {...codeForm}>
-      <form onSubmit={codeForm.handleSubmit(handleVerifyCode)} className="space-y-4">
-        <FormField
-          control={codeForm.control}
-          name="code"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Código de Verificação</FormLabel>
-              <FormControl>
-                <InputOTP maxLength={6} {...field}>
-                  <InputOTPGroup>
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
-                    <InputOTPSlot index={4} />
-                    <InputOTPSlot index={5} />
-                  </InputOTPGroup>
-                </InputOTP>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" disabled={loading}>
-          {loading ? 'Verificando...' : 'Verificar Código'}
-        </Button>
-        {error && <p className="text-red-500">{error}</p>}
-      </form>
-    </Form>
+    <div className="space-y-4 w-2/4 m-auto">
+      <Form {...codeForm}>
+        <form onSubmit={codeForm.handleSubmit(handleVerifyCode)} className="space-y-4">
+          <FormField
+            control={codeForm.control}
+            name="code"
+            render={({ field }) => (
+              <FormItem className='flex flex-col w-full'>
+                <FormLabel className='font-bold text-3xl'>Código de verificação</FormLabel>
+                <FormDescription className='text-black/80 mb-8'>Digite o código recebido em seu e-mail corporativo para logar.</FormDescription>
+                <FormControl>
+                  <InputOTP maxLength={6} {...field}>
+                    <InputOTPGroup className='w-full *:w-full *:2xl:h-16'>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit" className='w-full bg-red-600 py-6 hover:bg-red-700 transition cursor-pointer' disabled={loading}>
+            {loading ? 'Verificando...' : 'Verificar código'}
+          </Button>
+          {error && <p className="text-red-500">{error}</p>}
+        </form>
+      </Form>
+    </div>
   );
 };
 

@@ -67,7 +67,8 @@ const LoginPage = () => {
     setError('');
 
     try {
-      await api.post('/auth/send-code', { name: data.name , email: data.email });
+      await axios.get("http://localhost:8000/sanctum/csrf-cookie", { withCredentials: true });
+      await api.post('/auth/send-code', { name: data.name , email: data.email }, { withCredentials: true});
       setUserEmail(data.email);
       setStep('codeInput');
       toast.success("Por favor, verifique o seu e-mail corporativo.");

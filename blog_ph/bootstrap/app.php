@@ -14,6 +14,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+<<<<<<< HEAD
+=======
+        $middleware->group('api', [
+            \App\Http\Middleware\CookieTokenAuth::class,
+        ]);
+
+>>>>>>> d5a0cce5b64ce84fae38b7e34d02a0f9f12a5fff
         $middleware->api(prepend: [
             EnsureFrontendRequestsAreStateful::class,
             HandleCors::class,
